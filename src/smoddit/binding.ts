@@ -1,5 +1,5 @@
 /* External Imports */
-import bre from '@nomiclabs/buidler'
+import hre from 'hardhat'
 
 /* Internal Imports */
 import { ModifiableContract } from './types'
@@ -75,7 +75,7 @@ const initSmod = (vm: any): void => {
  * @param contract Contract to bind.
  */
 export const bindSmod = (contract: ModifiableContract): void => {
-  const vm = bre.network.provider['_node' as any]['_vm' as any]
+  const vm = hre.network.provider['_node' as any]['_vm' as any]
   initSmod(vm)
 
   vm._smod.contracts[contract.address.toLowerCase()] = contract

@@ -1,5 +1,5 @@
 /* Imports: External */
-import bre from '@nomiclabs/buidler'
+import hre from 'hardhat'
 import { Contract, ContractFactory, ContractInterface, ethers } from 'ethers'
 
 /* Imports: Internal */
@@ -14,12 +14,12 @@ export const smockit = async (
     address?: string
   } = {}
 ): Promise<MockContract> => {
-  if (bre.network.name !== 'buidlerevm') {
+  if (hre.network.name !== 'buidlerevm') {
     throw new Error('smockit currently only supports the buidlerevm.')
   }
 
-  if (!bre.network.provider['_node' as any]) {
-    await bre.network.provider['_init' as any]()
+  if (!hre.network.provider['_node' as any]) {
+    await hre.network.provider['_init' as any]()
   }
 
   const iface: ContractInterface = (spec as any).interface || spec
@@ -29,7 +29,7 @@ export const smockit = async (
     opts.provider || (spec as any).provider
   ) as MockContract
 
-  const vm = bre.network.provider['_node' as any]['_vm' as any]
+  const vm = hre.network.provider['_node' as any]['_vm' as any]
   contract.smocked = {}
   for (const functionName of Object.keys(contract.functions)) {
     contract.smocked[functionName] = {

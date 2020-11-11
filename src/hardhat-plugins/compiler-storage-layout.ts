@@ -1,18 +1,18 @@
 /* External Imports */
 import fsExtra from 'fs-extra'
-import { internalTask } from '@nomiclabs/buidler/config'
-import { pluralize } from '@nomiclabs/buidler/internal/util/strings'
+import hre from 'hardhat'
+import { internalTask } from 'hardhat/config'
+import { pluralize } from 'hardhat/internal/util/strings'
 import {
-  getArtifactFromContractOutput,
-  saveArtifact,
-} from '@nomiclabs/buidler/internal/artifacts'
+  getArtifactFromContractOutput
+} from 'hardhat/internal/artifacts'
 import {
   TASK_COMPILE_GET_COMPILER_INPUT,
   TASK_BUILD_ARTIFACTS,
   TASK_COMPILE_GET_SOURCE_PATHS,
   TASK_COMPILE_CHECK_CACHE,
   TASK_COMPILE_COMPILE,
-} from '@nomiclabs/buidler/builtin-tasks/task-names'
+} from 'hardhat/builtin-tasks'
 
 internalTask(
   TASK_COMPILE_GET_COMPILER_INPUT,
@@ -57,6 +57,7 @@ internalTask(TASK_BUILD_ARTIFACTS).setAction(
       for (const [contractName, contractOutput] of Object.entries(file)) {
         const artifact: any = getArtifactFromContractOutput(
           contractName,
+          contractName,
           contractOutput
         )
         numberOfContracts += 1
@@ -64,7 +65,7 @@ internalTask(TASK_BUILD_ARTIFACTS).setAction(
         // Only difference here, set the "storageLayout" field of the artifact.
         artifact.storageLayout = (contractOutput as any).storageLayout
 
-        await saveArtifact(config.paths.artifacts, artifact)
+        await hre.artifacts.saveArtifactAndDebugFile(artifact, config.paths.artifacts)
       }
     }
 

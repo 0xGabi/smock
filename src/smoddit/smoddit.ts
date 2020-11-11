@@ -1,5 +1,5 @@
 /* External Imports */
-import bre, { ethers } from '@nomiclabs/buidler'
+import hre, { ethers } from 'hardhat'
 
 /* Internal Imports */
 import { ModifiableContract, ModifiableContractFactory } from './types'
@@ -24,7 +24,7 @@ export const smoddit = async (
   const layout = await getStorageLayout(name)
 
   const pStateManager =
-    bre.network.provider['_node' as any]['_vm' as any].pStateManager
+    hre.network.provider['_node' as any]['_vm' as any].pStateManager
   const originalDeployFn = factory.deploy.bind(factory)
   factory.deploy = async (...args: any[]): Promise<ModifiableContract> => {
     const contract: ModifiableContract = await originalDeployFn(...args)
